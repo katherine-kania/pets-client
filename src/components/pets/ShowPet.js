@@ -13,7 +13,7 @@ const ShowPet = (props) => {
         getOnePet(id)
             .then(res => setPet(res.data.pet))
             .catch(console.error)
-    }, [])
+    }, [id])
 
     if (!pet) {
         return (
