@@ -2,17 +2,31 @@ import React, {useState, useEffect} from 'react'
 import {getOnePet} from '../../api/pets'
 import {useParams} from 'react-router-dom'
 import { Spinner, Container, Card } from 'react-bootstrap'
+import {showPetSuccess, showPetFailure} from '../shared/AutoDismissAlert/messages'
+
 
 const ShowPet = (props) => {
     const [pet, setPet] = useState(null)
-    console.log('props in showPet', props)
+    // console.log('props in showPet', props)
     const {id} = useParams()
-    console.log('id in showPet', id)
+    // console.log('id in showPet', id)
+    const { msgAlert} = props
 
     useEffect(() => {
         getOnePet(id)
             .then(res => setPet(res.data.pet))
-            .catch(console.error)
+            .then(() =>
+                msgAlert({
+                    heading: 'Pet shown!',
+                    message: showPetSuccess,
+                    variant: 'success',
+            }))
+            .catch(() =>
+            msgAlert({
+                heading: 'Oh No, pet not shown!',
+                message: showPetFailure,
+                variant: 'danger',
+        }))
     }, [id])
 
     if (!pet) {
